@@ -8,23 +8,44 @@ vcards = {}
 HTML_FORM = '''
 <!DOCTYPE html>
 <html>
-<head><title>Create vCard</title></head>
-<body style="max-width:600px;margin:40px auto;padding:20px;font-family:system-ui">
-<h1>Create vCard</h1>
+<head>
+<title>Create vCard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:20px}
+.container{max-width:600px;margin:40px auto;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);border-radius:20px;padding:40px;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+h1{font-size:32px;font-weight:700;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:30px;text-align:center}
+.form-group{margin-bottom:20px}
+label{display:block;font-weight:600;color:#333;margin-bottom:8px;font-size:14px}
+input,textarea{width:100%;padding:12px 16px;border:2px solid #e0e0e0;border-radius:10px;font-size:15px;transition:all 0.3s;font-family:inherit}
+input:focus,textarea:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,0.1)}
+textarea{resize:vertical;min-height:80px}
+button{width:100%;padding:14px;background:linear-gradient(135deg,#667eea,#764ba2);color:white;border:none;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s}
+button:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(102,126,234,0.4)}
+button:active{transform:translateY(0)}
+.divider{height:1px;background:linear-gradient(90deg,transparent,#e0e0e0,transparent);margin:30px 0}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>✨ Create vCard</h1>
 <form method="POST" action="/api/vcards">
-<div style="margin-bottom:15px"><label>Card Name</label><input name="cardName" style="width:100%;padding:8px" required></div>
-<div style="margin-bottom:15px"><label>Email (for editing)</label><input name="email" type="email" style="width:100%;padding:8px" required></div>
-<div style="margin-bottom:15px"><label>Password</label><input name="password" type="password" style="width:100%;padding:8px" required></div>
-<div style="margin-bottom:15px"><label>First Name</label><input name="firstName" style="width:100%;padding:8px" required></div>
-<div style="margin-bottom:15px"><label>Last Name</label><input name="lastName" style="width:100%;padding:8px" required></div>
-<div style="margin-bottom:15px"><label>Organization</label><input name="organization" style="width:100%;padding:8px"></div>
-<div style="margin-bottom:15px"><label>Position</label><input name="position" style="width:100%;padding:8px"></div>
-<div style="margin-bottom:15px"><label>Phone</label><input name="phone" style="width:100%;padding:8px"></div>
-<div style="margin-bottom:15px"><label>Email Contact</label><input name="emailContact" type="email" style="width:100%;padding:8px"></div>
-<div style="margin-bottom:15px"><label>Website</label><input name="website" style="width:100%;padding:8px"></div>
-<div style="margin-bottom:15px"><label>Address</label><textarea name="address" style="width:100%;padding:8px"></textarea></div>
-<button type="submit" style="padding:10px 20px;background:#0070f3;color:white;border:none;cursor:pointer">Create Card</button>
+<div class="form-group"><label>Card Name</label><input name="cardName" required></div>
+<div class="form-group"><label>Email (for editing)</label><input name="email" type="email" required></div>
+<div class="form-group"><label>Password</label><input name="password" type="password" required></div>
+<div class="divider"></div>
+<div class="form-group"><label>First Name</label><input name="firstName" required></div>
+<div class="form-group"><label>Last Name</label><input name="lastName" required></div>
+<div class="form-group"><label>Organization</label><input name="organization"></div>
+<div class="form-group"><label>Position</label><input name="position"></div>
+<div class="form-group"><label>Phone</label><input name="phone" type="tel"></div>
+<div class="form-group"><label>Email Contact</label><input name="emailContact" type="email"></div>
+<div class="form-group"><label>Website</label><input name="website" type="url"></div>
+<div class="form-group"><label>Address</label><textarea name="address"></textarea></div>
+<button type="submit">Create Card ✨</button>
 </form>
+</div>
 </body>
 </html>
 '''
@@ -32,20 +53,62 @@ HTML_FORM = '''
 VCARD_VIEW = '''
 <!DOCTYPE html>
 <html>
-<head><title>{{ name }}</title></head>
-<body style="max-width:600px;margin:40px auto;padding:20px;font-family:system-ui">
-<div style="text-align:center;margin-bottom:30px">
+<head>
+<title>{{ name }}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:20px}
+.card{max-width:600px;margin:40px auto;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);border-radius:20px;padding:40px;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+.avatar{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:48px;color:white;font-weight:700;box-shadow:0 10px 30px rgba(102,126,234,0.3)}
+h1{font-size:32px;font-weight:700;color:#333;text-align:center;margin-bottom:8px}
+.position{font-size:18px;color:#667eea;text-align:center;font-weight:600;margin-bottom:6px}
+.org{font-size:16px;color:#888;text-align:center;margin-bottom:30px}
+.contact-item{display:flex;align-items:center;padding:16px;background:#f8f9fa;border-radius:12px;margin-bottom:12px;transition:all 0.3s}
+.contact-item:hover{background:#e9ecef;transform:translateX(4px)}
+.contact-icon{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white;font-size:18px;margin-right:16px;flex-shrink:0}
+.contact-label{font-weight:600;color:#666;font-size:13px;margin-bottom:4px}
+.contact-value{color:#333;font-size:15px}
+.contact-value a{color:#667eea;text-decoration:none}
+.contact-value a:hover{text-decoration:underline}
+.btn{display:block;width:100%;padding:16px;background:linear-gradient(135deg,#667eea,#764ba2);color:white;text-align:center;text-decoration:none;border-radius:12px;font-size:16px;font-weight:600;margin-top:30px;transition:transform 0.2s,box-shadow 0.2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(102,126,234,0.4)}
+</style>
+</head>
+<body>
+<div class="card">
+<div class="avatar">{{ name[0] }}</div>
 <h1>{{ name }}</h1>
-{% if position %}<p style="font-size:18px;color:#666">{{ position }}</p>{% endif %}
-{% if organization %}<p style="font-size:16px;color:#888">{{ organization }}</p>{% endif %}
+{% if position %}<div class="position">{{ position }}</div>{% endif %}
+{% if organization %}<div class="org">{{ organization }}</div>{% endif %}
+<div style="margin-top:30px">
+{% if phone %}
+<div class="contact-item">
+<div class="contact-icon">📱</div>
+<div><div class="contact-label">Phone</div><div class="contact-value"><a href="tel:{{ phone }}">{{ phone }}</a></div></div>
 </div>
-<div style="margin-bottom:20px">
-{% if phone %}<div style="margin-bottom:10px"><strong>Phone:</strong> <a href="tel:{{ phone }}">{{ phone }}</a></div>{% endif %}
-{% if email %}<div style="margin-bottom:10px"><strong>Email:</strong> <a href="mailto:{{ email }}">{{ email }}</a></div>{% endif %}
-{% if website %}<div style="margin-bottom:10px"><strong>Website:</strong> <a href="{{ website }}" target="_blank">{{ website }}</a></div>{% endif %}
-{% if address %}<div style="margin-bottom:10px"><strong>Address:</strong> {{ address }}</div>{% endif %}
+{% endif %}
+{% if email %}
+<div class="contact-item">
+<div class="contact-icon">✉️</div>
+<div><div class="contact-label">Email</div><div class="contact-value"><a href="mailto:{{ email }}">{{ email }}</a></div></div>
 </div>
-<a href="/api/vcards/{{ slug }}/download" style="display:block;padding:10px 20px;background:#0070f3;color:white;text-align:center;text-decoration:none">Save Contact</a>
+{% endif %}
+{% if website %}
+<div class="contact-item">
+<div class="contact-icon">🌐</div>
+<div><div class="contact-label">Website</div><div class="contact-value"><a href="{{ website }}" target="_blank">{{ website }}</a></div></div>
+</div>
+{% endif %}
+{% if address %}
+<div class="contact-item">
+<div class="contact-icon">📍</div>
+<div><div class="contact-label">Address</div><div class="contact-value">{{ address }}</div></div>
+</div>
+{% endif %}
+</div>
+<a href="/api/vcards/{{ slug }}/download" class="btn">💾 Save Contact</a>
+</div>
 </body>
 </html>
 '''
